@@ -1,13 +1,16 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>Test</title>
+    <title>WhatsApp Log Prettifier</title>
     <script src="https://code.angularjs.org/1.4.0-rc.0/angular.js"> </script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
     <style>
+      body {
+        font-family: 'Amaranth', sans-serif;
+      }
       .bubble {
         max-width: 100%;
         padding: 0px;
@@ -22,10 +25,12 @@
 
   <body style="background-color:lightgrey;">
     <div class="container" ng-app="testing" ng-controller="testController">
+      <h1>Whatsapp Log Prettifier</h1>
+      <p>Paste your Whatsapp Chat Log below:</p>
       <textarea rows="20" cols="100" ng-model="chatlog" ng-trim="false" ng-list="&#10;">
         Enter your whatsapp conversation in here...
       </textarea>
-
+      <p> Your Prettified Whatsapp Log that you can copy paste into your blog or email: </p>
       <div ng-repeat="line in chatlog">
         <span ng-init="parts=getPartsFromLine(line)"></span>
           <div class="bubble" style="font-family: 'Amaranth', sans-serif;background-color:#FFFFFF">

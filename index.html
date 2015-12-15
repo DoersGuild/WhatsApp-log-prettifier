@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Test</title>
+    <script src="https://code.angularjs.org/1.4.0-rc.0/angular.js"> </script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Amaranth' rel='stylesheet' type='text/css'>
+    <style>
+      .bubble {
+        max-width: 100%;
+        padding: 0px;
+        background: #f4ffd9;
+        border: 1px solid;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+
+  <body style="background-color:lightgrey;">
+    <div class="container" ng-app="testing" ng-controller="testController">
+      <textarea rows="20" cols="100" ng-model="chatlog" ng-trim="false" ng-list="&#10;">
+        Enter your whatsapp conversation in here...
+      </textarea>
+
+      <div ng-repeat="line in chatlog">
+        <span ng-init="parts=getPartsFromLine(line)"></span>
+          <div class="bubble" style="font-family: 'Amaranth', sans-serif;background-color:#FFFFFF">
+              <p>
+                  <div style="color:#878282;text-align:center;font-size:12"> {{parts.date}} </div>
+                  <div id="sender" style="padding-left:10px;font-size:15; color: {{getRandomColor(parts.sender)}}"><span></span>{{parts.sender}}</div>
+                  <div style="padding-left:10px;font-size:20;padding-right:20px">{{parts.message}}</div>
+                  <div style="font-size:10;color:#878282;text-align:right;padding-right:10px;padding-bottom:5px">{{parts.time}}</div>
+              </p>
+          </div>
+      </div>
+    </div>
+  </body>
+
+<script>
+  var app = angular.module('testing',[]);
+  app.controller('testController', function($scope) {
+
+    $scope.getPartsFromLine = function(line){
+      var parts = {};
+      parts.date = line.split(',')[0].trim();
+      parts.time = line.split(',')[1].split('-')[0].trim();
+      parts.sender = line.split(',')[1].split('-')[1].split(':')[0].trim();
+      parts.message = line.split(':')[2].trim();
+      return parts;
+    }
+
+    $scope.getRandomColor = function(sender){
+      $scope.colors = $scope.colors||{};
+      if (!$scope.colors.hasOwnProperty(sender)) {
+        $scope.colors[sender] = '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        console.log($scope.colors[sender]);
+      }
+      return $scope.colors[sender];
+    }
+});
+</script>
+</html>

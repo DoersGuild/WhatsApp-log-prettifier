@@ -10,6 +10,7 @@
     <style>
       body {
         font-family: 'Amaranth', sans-serif;
+        background: url(background.jpg);
       }
       .bubble {
         max-width: 100%;
@@ -19,18 +20,23 @@
         -webkit-border-radius: 10px;
         -moz-border-radius: 10px;
         border-radius: 10px;
+        margin: 5px;
+      }
+
+      .highlight-text {
+        background-color: hsla(60,100%,90%,0.5);
       }
     </style>
   </head>
 
-  <body style="background-color:lightgrey;">
+  <body>
     <div class="container" ng-app="testing" ng-controller="testController">
-      <h1>Whatsapp Log Prettifier</h1>
-      <p>Paste your Whatsapp Chat Log below:</p>
+      <h1 class="highlight-text">Whatsapp Log Prettifier</h1>
+      <p class="highlight-text">Paste your Whatsapp Chat Log below:</p>
       <textarea rows="20" cols="100" ng-model="chatlog" ng-trim="false" ng-list="&#10;">
         Enter your whatsapp conversation in here...
       </textarea>
-      <p> Your Prettified Whatsapp Log that you can copy paste into your blog or email: </p>
+      <p class="highlight-text"> Your Prettified Whatsapp Log that you can copy paste into your blog or email: </p>
       <div ng-repeat="line in chatlog">
         <span ng-init="parts=getPartsFromLine(line)"></span>
           <div class="bubble" style="font-family: 'Amaranth', sans-serif;background-color:#FFFFFF">
@@ -48,14 +54,31 @@
 <script>
   var app = angular.module('testing',[]);
   app.controller('testController', function($scope) {
-
+    var prevparts = {};
     $scope.getPartsFromLine = function(line){
       var parts = {};
-      parts.date = line.split(',')[0].trim();
-      parts.time = line.split(',')[1].split('-')[0].trim();
-      parts.sender = line.split(',')[1].split('-')[1].split(':')[0].trim();
-      parts.message = line.split(':')[2].trim();
-      return parts;
+      var pattern = /^[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{2}$/;
+      if(pattern.test(line.split(',')[0].trim()))
+      {
+        parts.date = line.split(',')[0].trim();
+        parts.time = line.split(',')[1].split('-')[0].trim();
+        parts.sender = line.split(',')[1].split('-')[1].split(':')[0].trim();
+        parts.message = line.split(':')[2].trim();
+        prevparts.date = line.split(',')[0].trim();
+        prevparts.time = line.split(',')[1].split('-')[0].trim();
+        prevparts.sender = line.split(',')[1].split('-')[1].split(':')[0].trim();
+        prevparts.message = line.split(':')[2].trim();
+        return parts;
+      }
+      else
+      {
+        console.log("Hello there");
+        parts.date = prevparts.date;
+        parts.time = prevparts.time;
+        parts.sender = prevparts.sender;
+        parts.message = line;
+        return parts;
+      }
     }
 
     $scope.getRandomColor = function(sender){
